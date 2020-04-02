@@ -7,11 +7,23 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
-  const user = new User({
-    username: req.body.username,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
-  });
+    const user = new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8),
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      timestamps: req.body.timestamps,
+      gpax: req.body.gpax,
+      image: req.body.image,
+      prefix: req.body.prefix,
+      year: req.body.year,
+      head: req.body.head,
+      professional: req.body.professional,
+      remain: req.body.remain,
+      seat: req.body.seat,
+      status: req.body.status
+    });
 
   user.save((err, user) => {
     if (err) {
@@ -93,15 +105,26 @@ exports.signin = (req, res) => {
         expiresIn: 86400 // 24 hours
       });
 
-      var authorities = [];
+      var authorities;
 
-      for (let i = 0; i < user.roles.length; i++) {
-        authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-      }
+      authorities = "ROLE_" + user.roles[0].name.toUpperCase();
+
       res.status(200).send({
         id: user._id,
         username: user.username,
         email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        timestamps: user.timestamps,
+        gpax: user.gpax,
+        image: user.image,
+        prefix: user.prefix,
+        year: user.year,
+        head: user.head,
+        professional: user.professional,
+        remain: user.remain,
+        seat: user.seat,
+        status: user.status,
         roles: authorities,
         accessToken: token
       });
