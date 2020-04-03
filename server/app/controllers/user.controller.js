@@ -2,10 +2,23 @@ const db = require("../models");
 const User = db.user;
 const Role = db.role;
 
-// TODO : GET ALL
-exports.allAccess = (req, res) => {
-  res.status(200).send("Public Content.");
+// TODO : GET ALL ROLES
+exports.allRole = (req, res) => {
+  User.find({})
+    .exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      res.status(200).send(user);
+    });
 };
+
 
 // TODO : GET BY USERNAME
 exports.getByUsername = (req, res) => {

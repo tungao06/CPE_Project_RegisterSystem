@@ -1,16 +1,11 @@
 const mongoose = require("mongoose");
 
-const User = mongoose.model(
-  "User",
+const Admin = mongoose.model(
+  "Admin",
   new mongoose.Schema({
     username: { type: String },
-    password: { type: String },
     email: { type: String },
-    firstName: { type: String },
-    lastName: { type: String },
-    gpax: { type: Number },
-    image: { type: String },
-    prefix: { type: String },
+    password: { type: String },
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -27,4 +22,4 @@ const User = mongoose.model(
   )
 );
 
-module.exports = User;
+module.exports = Admin;

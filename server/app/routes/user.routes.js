@@ -11,7 +11,7 @@ module.exports = function (app) {
   });
 
   // TODO : ALL
-  app.get("/api/all", controller.allAccess);
+  app.get("/api/all/user/role", controller.allRole);
 
 
   // TODO : USER
@@ -25,30 +25,4 @@ module.exports = function (app) {
     [authJwt.verifyToken, authJwt.isUser],
     controller.putByUsername
   );
-
-
-  // TODO : TEACHER
-  app.get(
-    "/api/teacher",
-    [authJwt.verifyToken, authJwt.isTeacher],
-    controller.getByUsername
-  );
-  app.put(
-    "/api/teacher",
-    [authJwt.verifyToken, authJwt.isTeacher],
-    controller.putByUsername
-  );
-
-
-  // TODO : ADMIN
-  app.get(
-    "/api/admin",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    controller.getByUsername
-  );
-  app.put(
-    "/api/teacher",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    controller.putByUsername
-  );
-};
+}
