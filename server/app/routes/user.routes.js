@@ -1,8 +1,8 @@
 const { authJwt } = require("../middlewares");
 const controller = require("../controllers/user.controller");
 
-module.exports = function(app) {
-  app.use(function(req, res, next) {
+module.exports = function (app) {
+  app.use(function (req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
       "x-access-token, Origin, Content-Type, Accept"
@@ -10,19 +10,45 @@ module.exports = function(app) {
     next();
   });
 
-  app.get("/api/test/all", controller.allAccess);
+  // TODO : ALL
+  app.get("/api/all", controller.allAccess);
 
-  app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
 
+  // TODO : USER
   app.get(
-    "/api/test/mod",
-    [authJwt.verifyToken, authJwt.isModerator],
-    controller.moderatorBoard
+    "/api/user",
+    [authJwt.verifyToken, authJwt.isUser],
+    controller.getByUsername
+  );
+  app.put(
+    "/api/teacher",
+    [authJwt.verifyToken, authJwt.isUser],
+    controller.putByUsername
   );
 
+
+  // TODO : TEACHER
   app.get(
-    "/api/test/admin",
+    "/api/teacher",
+    [authJwt.verifyToken, authJwt.isTeacher],
+    controller.getByUsername
+  );
+  app.put(
+    "/api/teacher",
+    [authJwt.verifyToken, authJwt.isTeacher],
+    controller.putByUsername
+  );
+
+
+  // TODO : ADMIN
+  app.get(
+    "/api/admin",
     [authJwt.verifyToken, authJwt.isAdmin],
-    controller.adminBoard
+    controller.getByUsername
+  );
+  app.put(
+    "/api/teacher",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.putByUsername
   );
 };

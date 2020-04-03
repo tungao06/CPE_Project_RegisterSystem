@@ -8,12 +8,11 @@ const User = mongoose.model(
     password: { type: String },
     firstName: { type: String },
     lastName: { type: String },
-    timestamps: { type: Date, default: Date.now },
     gpax: { type: Number },
     image: { type: String },
     prefix: { type: String },
     year: { type: Number },
-    head: { type: String},
+    header: { type: String },
     professional: { type: String },
     remain: { type: String },
     seat: { type: String },
@@ -24,7 +23,14 @@ const User = mongoose.model(
         ref: "Role"
       }
     ]
-  })
+  },
+    {
+      timestamps: {
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
+      }
+    }
+  )
 );
 
 module.exports = User;
