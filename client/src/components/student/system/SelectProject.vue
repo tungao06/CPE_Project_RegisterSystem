@@ -27,7 +27,7 @@
  * Becareful this component
  *
  */
-import firebase from "firebase";
+//import firebase from "firebase";
 
 export default {
   data() {
@@ -45,72 +45,72 @@ export default {
   methods: {
     // function validation of select lecturer non duplicate lecturer and non duplicate selected
     notDuplicate: function() {
-      let date = new Date()
+      //let date = new Date()
       this.project = [
         ...new Set(this.selected)
       ];
       if (this.project.length === this.teachers.length) {
-        firebase
-          .database()
-          .ref("lecturer_register/" + this.profile.year + '/' + this.user)
-          .set({
-            teacher: this.project,
-            student: this.user,
-            gpax: this.profile.gpax,
-            date:
-              date.getDate() +
-              "/" +
-              (date.getMonth() + 1) +
-              "/" +
-              date.getFullYear() +
-              " " +
-              date.getHours() +
-              ":" +
-              date.getMinutes() +
-              ":" +
-              date.getSeconds()
-          });
+        // firebase
+        //   .database()
+        //   .ref("lecturer_register/" + this.profile.year + '/' + this.user)
+        //   .set({
+        //     teacher: this.project,
+        //     student: this.user,
+        //     gpax: this.profile.gpax,
+        //     date:
+        //       date.getDate() +
+        //       "/" +
+        //       (date.getMonth() + 1) +
+        //       "/" +
+        //       date.getFullYear() +
+        //       " " +
+        //       date.getHours() +
+        //       ":" +
+        //       date.getMinutes() +
+        //       ":" +
+        //       date.getSeconds()
+        //   });
       } else {
         this.duplicateError = true;
       }
     }
   },
-  created() {
-    this.$store.dispatch("settingStudent", this.students);
-    this.$store.dispatch("settingTeacher", this.teachers);
+  // created() {
+  //   this.students = JSON.parse(localStorage.getItem('user'));
+  //   this.teachers = JSON.parse(localStorage.getItem('teacher'));
 
-    this.students.forEach(value => {
-      if (value.id === this.user) {
-        this.profile = {
-          fullname: value.prefix + " " + value.firstname + " " + value.lastname,
-          gpax: value.gpax,
-          year: value.year,
-          image: value.image
-        };
-        return;
-      }
-    });
-    /* eslint-disable */ 
-    firebase.database().ref('teacher_register/' + this.profile.year)
-      .on('child_added', snapshot => {
-        this.register.push(snapshot.key)
-        console.log(this.register)
-      })
+  //   this.students.forEach(value => {
+  //     if (value.id === this.user) {
+  //       this.profile = {
+  //         fullname: value.prefix + " " + value.firstname + " " + value.lastname,
+  //         gpax: value.gpax,
+  //         year: value.year,
+  //         image: value.image
+  //       };
+  //       return;
+  //     }
+  //   });
+  //   /* eslint-disable */ 
+  //   firebase.database().ref('teacher_register/' + this.profile.year)
+  //     .on('child_added', snapshot => {
+  //       this.register.push(snapshot.key)
+  //       console.log(this.register)
+  //     })
 
-    let filterTeacher = []
-    this.teachers.forEach(snapshot => {
-      for (let i = 0; i < this.register.length; i++) {
-        if (snapshot.value === this.register[i]) {
-          filterTeacher.push({
-            value: snapshot.value,
-            text: snapshot.text
-          })
-          break
-        }
-      }
-    })
+  //   let filterTeacher = []
+  //   this.teachers.forEach(snapshot => {
+  //     for (let i = 0; i < this.register.length; i++) {
+  //       if (snapshot.value === this.register[i]) {
+  //         filterTeacher.push({
+  //           value: snapshot.value,
+  //           text: snapshot.text
+  //         })
+  //         break
+  //       }
+  //     }
+  //   })
 
-    this.teachers = filterTeacher
-  }
+  //   this.teachers = filterTeacher
+  // }
 };
 </script>

@@ -11,36 +11,29 @@ export const actions = {
         };
         commit('setLoading', true)
         api
-            .post("/api/auth/signin", data, {
+            .post("/api/auth/signinAdmin", data, {
                 headers: {
                     "content-type": "application/json"
                 }
             })
             .then(response => {
 
-                if (response.data.accessToken) {/* eslint-disable no-console */
-                    console.log(response.data.roles.toLowerCase());
-                    /* eslint-enable no-console */
-                    if (response.data.roles[0] == "ROLE_ADMIIN") {
-                        /* eslint-disable no-console */
+                if (response.data.accessToken) {
+                    console.log(response.data.roles);
+                    if (response.data.roles[0] == "ROLE_ADMIN") {
                         console.log(response.data.username);
                         console.log(response.data.accessToken);
-                        /* eslint-enable no-console */
                         localStorage.setItem('admin', JSON.stringify(response.data));
                         commit('setUser', payload.username)
                         router.push('/admin/' + payload.username)
                     } else {
-                        /* eslint-disable no-console */
                         console.log("Can't find admin account");
-                        /* eslint-enable no-console */
                         router.push('/home')
                     }
                 }
             })
             .catch(error => {
-                /* eslint-disable no-console */
                 console.log(error);
-                /* eslint-enable no-console */
                 this.errored = true
             })
             .finally(() =>
@@ -53,36 +46,29 @@ export const actions = {
         };
         commit('setLoading', true)
         api
-            .post("/api/auth/signin", data, {
+            .post("/api/auth/signinTeacher", data, {
                 headers: {
                     "content-type": "application/json"
                 }
             })
             .then(response => {
 
-                if (response.data.accessToken) {/* eslint-disable no-console */
+                if (response.data.accessToken) {
                     console.log(response.data.roles);
-                    /* eslint-enable no-console */
                     if (response.data.roles[0] == "ROLE_TEACHER") {
-                        /* eslint-disable no-console */
                         console.log(response.data.username);
                         console.log(response.data.accessToken);
-                        /* eslint-enable no-console */
                         localStorage.setItem('teacher', JSON.stringify(response.data));
                         commit('setUser', payload.username)
                         router.push('/teacher/' + payload.username)
                     } else {
-                        /* eslint-disable no-console */
                         console.log("Can't find teacher account");
-                        /* eslint-enable no-console */
                         router.push('/home')
                     }
                 }
             })
             .catch(error => {
-                /* eslint-disable no-console */
                 console.log(error);
-                /* eslint-enable no-console */
                 this.errored = true
             })
             .finally(() =>
@@ -95,7 +81,7 @@ export const actions = {
         };
         commit('setLoading', true)
         api
-            .post("/api/auth/signin", data, {
+            .post("/api/auth/signinUser", data, {
                 headers: {
                     "content-type": "application/json"
                 }
@@ -104,25 +90,19 @@ export const actions = {
 
                 if (response.data.accessToken) {
                     if (response.data.roles[0] == "ROLE_USER") {
-                        /* eslint-disable no-console */
                         console.log(response.data.username);
                         console.log(response.data.accessToken);
-                        /* eslint-enable no-console */
                         localStorage.setItem('user', JSON.stringify(response.data));
                         commit('setUser', payload.username)
                         router.push('/student/' + payload.username)
                     } else {
-                        /* eslint-disable no-console */
                         console.log("Can't find student account");
-                        /* eslint-enable no-console */
                         router.push('/home')
                     }
                 }
             })
             .catch(error => {
-                /* eslint-disable no-console */
                 console.log(error);
-                /* eslint-enable no-console */
                 this.errored = true
             })
             .finally(() =>
@@ -131,13 +111,26 @@ export const actions = {
 
     // schoolyear
     createYear({ commit }, payload) {
-        commit('setLoading', true)
-        firebase.database().ref('schoolyear/' + payload).set({
+        var data = {
             year: payload,
             status: false
-        })
+        };
+        commit('setLoading', true)
+        api
+            .post("/api/register", data, {
+                headers: {
+                    "content-type": "application/json"
+                }
+            })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error);
+            });
         commit('setLoading', false)
     },
+
     settingYear({ commit }, payload) {
         commit('setLoading', true)
         firebase

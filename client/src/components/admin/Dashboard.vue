@@ -82,7 +82,7 @@
       </v-container>
       <v-divider></v-divider>
       <v-list dense>
-        <v-list-item link replace to="/alogin">
+        <v-list-item @click.prevent="logout" link to="/alogin">
           <v-list-item-action>
             <v-icon>mdi-account-off</v-icon>
           </v-list-item-action>
@@ -114,8 +114,12 @@
 export default {
   data() {
     return {
-      drawer: null,
+      drawer: null
     };
+  },
+
+  logout() {
+    localStorage.removeItem("teacher");
   }
 };
 </script>

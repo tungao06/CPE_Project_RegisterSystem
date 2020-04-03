@@ -56,7 +56,7 @@
       </v-container>
       <v-divider></v-divider>
       <v-list dense>
-        <v-list-item link replace to="/home">
+        <v-list-item @click.prevent="logout" link to="/home">
           <v-list-item-action>
             <v-icon>mdi-account-off</v-icon>
           </v-list-item-action>
@@ -127,6 +127,10 @@ export default {
           status: false
         });
     }
+  },
+
+  logout() {
+    localStorage.removeItem("teacher");
   },
   created() {
     firebase
