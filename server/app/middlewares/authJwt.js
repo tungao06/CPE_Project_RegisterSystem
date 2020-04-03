@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
 const db = require("../models");
 const User = db.user;
+const Teacher = db.teacher;
+const Admin = db.admin;
 const Role = db.role;
 
 verifyToken = (req, res, next) => {
@@ -21,7 +23,7 @@ verifyToken = (req, res, next) => {
 };
 
 isAdmin = (req, res, next) => {
-  User.findById(req.userId).exec((err, user) => {
+  Admin.findById(req.adminId).exec((err, admin) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
@@ -29,7 +31,7 @@ isAdmin = (req, res, next) => {
 
     Role.find(
       {
-        _id: { $in: user.roles }
+        _id: { $in: admin.roles }
       },
       (err, roles) => {
         if (err) {
@@ -51,7 +53,43 @@ isAdmin = (req, res, next) => {
   });
 };
 
-isModerator = (req, res, next) => {
+isTeacher = (req, res, next) => {
+  Teacher.findById(req.userId).exec((err, teacher) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    try {
+      Role.find(
+        {
+          _id: { $in: teacher.roles }
+        },
+        (err, roles) => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+
+          for (let i = 0; i < roles.length; i++) {
+            if (roles[i].name === "teacher") {
+              next();
+              return;
+            }
+          }
+
+          res.status(403).send({ message: "Require Teacher Role!" });
+          return;
+        }
+      );
+    }
+    catch (err) {
+      res.status(404).send({ message: "Don't have Teacher account!" });
+    }
+
+  });
+};
+
+isUser = (req, res, next) => {
   User.findById(req.userId).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
@@ -69,13 +107,13 @@ isModerator = (req, res, next) => {
         }
 
         for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "teacher") {
+          if (roles[i].name === "user") {
             next();
             return;
           }
         }
 
-        res.status(403).send({ message: "Require Teacher Role!" });
+        res.status(403).send({ message: "Require User Role!" });
         return;
       }
     );
@@ -85,6 +123,7 @@ isModerator = (req, res, next) => {
 const authJwt = {
   verifyToken,
   isAdmin,
-  isModerator
+  isTeacher,
+  isUser
 };
 module.exports = authJwt;
